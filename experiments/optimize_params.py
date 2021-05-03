@@ -199,10 +199,12 @@ for dataset_name in datasets:
     # prepare chunks for CV
     dt_prefixes = []
     class_ratios = []
+    ngram_size=3
     for train_chunk, test_chunk in dataset_manager.get_stratified_split_generator(train, n_splits=n_splits):
         class_ratios.append(dataset_manager.get_class_ratio(train_chunk))
         # generate data where each prefix is a separate instance
-        dt_prefixes.append(dataset_manager.generate_prefix_data(test_chunk, min_prefix_length, max_prefix_length))
+        # dt_prefixes.append(dataset_manager.generate_prefix_data_ngram(test_chunk, min_prefix_length, max_prefix_length))
+        dt_prefixes.append(dataset_manager.generate_prefix_data_ngram(test_chunk, ngram_size))
     del train
         
     # set up search space

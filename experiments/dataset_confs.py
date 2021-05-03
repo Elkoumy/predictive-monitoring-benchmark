@@ -214,4 +214,26 @@ for formula in range(1,5):
     static_cat_cols[dataset] = ["Diagnosis", "Treatment code", "Diagnosis code", "Specialism code", "Diagnosis Treatment Combination ID"]
     dynamic_num_cols[dataset] = ["Number of executions", "hour", "weekday", "month", "timesincemidnight", "timesincelastevent", "timesincecasestart", "event_nr", "open_cases"]
     static_num_cols[dataset] = ["Age"]
-    
+
+
+
+logs_dir = "experiment_log"
+#### Production log settings ####
+dataset = "turnaround_anon_sla_renamed"
+
+filename[dataset] = os.path.join(logs_dir, "turnaround_anon_sla_renamed.csv")
+
+case_id_col[dataset] = "Case ID"
+activity_col[dataset] = "Activity"
+#resource_col[dataset] = "Resource"
+timestamp_col[dataset] = "time:timestamp"
+label_col[dataset] = "label"
+neg_label[dataset] = "1"
+pos_label[dataset] = "0"
+
+# features for classifier
+static_cat_cols[dataset] = []
+
+static_num_cols[dataset] = ['SLA MIN', 'duration']
+dynamic_cat_cols[dataset] = ["Activity",]
+dynamic_num_cols[dataset] = ["WIP"]

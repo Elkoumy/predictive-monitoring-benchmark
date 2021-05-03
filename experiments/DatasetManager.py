@@ -7,6 +7,21 @@ import numpy as np
 
 from sklearn.model_selection import StratifiedKFold
 
+def create_ngrams(data, ngram_size):
+    result=pd.DataFrame()
+
+
+    for idx in range(0,data.shape[0]- ngram_size +1):
+
+        prefix=data.iloc[idx:idx+ngram_size].copy()
+        prefix=prefix.reset_index()
+
+        prefix['Case ID']=prefix['Case ID']+'_'+str(idx)
+
+        result=pd.concat([result,prefix])
+
+    return result
+
 
 class DatasetManager:
     
@@ -34,6 +49,7 @@ class DatasetManager:
             dtypes[col] = "float"
 
         data = pd.read_csv(dataset_confs.filename[self.dataset_name], sep=";", dtype=dtypes)
+        print(data.columns)
         data[self.timestamp_col] = pd.to_datetime(data[self.timestamp_col])
 
         return data
@@ -117,6 +133,19 @@ class DatasetManager:
         return dt_prefixes
 
 
+
+    def generate_prefix_data_ngram(self,data, ngram_size):
+        # generate prefix data (each possible prefix becomes a trace)
+
+        # ngram_size=3
+        dt_prefixes=data.groupby(['Case ID']).apply(create_ngrams, ngram_size)
+
+        dt_prefixes=dt_prefixes.rename(columns={'Case ID': 'newcaseid'})
+        dt_prefixes=dt_prefixes.reset_index().rename(columns={'Case ID': 'original_caseid'})
+        dt_prefixes=dt_prefixes.drop('level_1',axis=1)
+        dt_prefixes=dt_prefixes.rename(columns={'newcaseid': 'Case ID'})
+
+        return dt_prefixes
     def get_pos_case_length_quantile(self, data, quantile=0.90):
         return int(np.ceil(data[data[self.label_col]==self.pos_label].groupby(self.case_id_col).size().quantile(quantile)))
 

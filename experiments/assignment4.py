@@ -137,6 +137,7 @@ df['WIP']=df.apply(count_wip,case_times=case_times ,axis=1)
 
 """Split into train and test"""
 df=df.rename(columns={'caseid': 'Case ID','activity':'Activity', 'start_timestamp':'time:timestamp'})
+df.to_csv(r'C:\Gamal Elkoumy\PhD\OneDrive - Tartu Ülikool\Courses\Process Mining\Assignment4\predictive-monitoring-benchmark\experiments\experiment_log\turnaround_anon_sla_renamed.csv',index=False, sep=';')
 
 train_ratio = 0.8
 n_splits = 2
@@ -148,19 +149,13 @@ train, test = split_data_strict(df, train_ratio, split="temporal")
 
 
 """Q3"""
-# ngram_size=3
-# train_prefixes_df=train.groupby(['Case ID']).apply(create_ngrams, ngram_size)
-# prefixes_df=prefixes_df.rename(columns={'caseid': 'Case ID','activity':'Activity', 'start_timestamp':'time:timestamp'})
 
-# prefixes_df=prefixes_df.reset_index().rename(columns={'caseid': 'original_caseid'})
-# prefixes_df=prefixes_df.drop('level_1',axis=1)
-# prefixes_df=prefixes_df.rename(columns={'newcaseid': 'caseid'})
 
 # prepare chunks for CV
 dt_prefixes = []
 class_ratios = []
 min_prefix_length = 1
-ngram_size=2
+ngram_size=5
 
 for train_chunk, test_chunk in get_stratified_split_generator(train, n_splits=n_splits):
     class_ratios.append(get_class_ratio(train_chunk))
@@ -267,7 +262,12 @@ import xgboost as xgb
 
 model= xgb.XGBClassifier(n_estimators=1000,
                                max_features=0.5,
-                                # max_depth=50,
+                                max_depth=29,
+                                colsample_bytree=0.7030548352363344,
+                                min_child_weight=4,
+                                learning_rate=0.4833951489143248,
+                                n_clusters=9,
+                                subsample=0.6491216308873613,
                                random_state=random_state,
                          n_jobs=-1)
 
