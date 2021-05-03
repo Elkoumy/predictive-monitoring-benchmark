@@ -260,16 +260,9 @@ import xgboost as xgb
 #                                max_features=0.5,
 #                                random_state=random_state)
 
-model= xgb.XGBClassifier(n_estimators=1000,
-                               max_features=0.5,
-                                max_depth=29,
-                                colsample_bytree=0.7030548352363344,
-                                min_child_weight=4,
-                                learning_rate=0.4833951489143248,
-                                n_clusters=9,
-                                subsample=0.6491216308873613,
-                               random_state=random_state,
-                         n_jobs=-1)
+model_parameters=pd.read_pickle(r'C:\Gamal Elkoumy\PhD\OneDrive - Tartu Ülikool\Courses\Process Mining\Assignment4\predictive-monitoring-benchmark\experiments\optimizer_log\optimal_params_xgboost_turnaround_anon_sla_renamed_cluster_index.pickle')
+
+model= xgb.XGBClassifier(**model_parameters)
 
 
 pipeline = Pipeline([('encoder', feature_combiner), ('cls', model)])
