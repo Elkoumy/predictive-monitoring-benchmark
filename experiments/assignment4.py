@@ -135,10 +135,11 @@ case_times=case_times.reset_index()
 
 df['WIP']=df.apply(count_wip,case_times=case_times ,axis=1)
 
-"""Split into train and test"""
+
 df=df.rename(columns={'caseid': 'Case ID','activity':'Activity', 'start_timestamp':'time:timestamp'})
 df.to_csv(r'C:\Gamal Elkoumy\PhD\OneDrive - Tartu Ülikool\Courses\Process Mining\Assignment4\predictive-monitoring-benchmark\experiments\experiment_log\turnaround_anon_sla_renamed.csv',index=False, sep=';')
 
+"""Split into train and test"""
 train_ratio = 0.8
 n_splits = 2
 random_state = 22
@@ -252,13 +253,9 @@ pd.DataFrame(encoding).to_csv('encoding.csv')
 
 """******* Perfroming training **************"""
 
-from sklearn.ensemble import RandomForestClassifier
 import xgboost as xgb
 
-# max_features 0..1
-# model = RandomForestClassifier(n_estimators=500,
-#                                max_features=0.5,
-#                                random_state=random_state)
+
 
 model_parameters=pd.read_pickle(r'C:\Gamal Elkoumy\PhD\OneDrive - Tartu Ülikool\Courses\Process Mining\Assignment4\predictive-monitoring-benchmark\experiments\optimizer_log\optimal_params_xgboost_turnaround_anon_sla_renamed_cluster_index.pickle')
 
