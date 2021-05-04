@@ -98,7 +98,7 @@ def create_ngrams(data, ngram_size):
         prefix=prefix.reset_index()
 
         prefix['Case ID']=prefix['Case ID']+'_'+str(idx)
-
+        prefix['prefix_nr'] = idx + 1
         result=pd.concat([result,prefix])
 
     return result
@@ -259,7 +259,9 @@ import xgboost as xgb
 
 model_parameters=pd.read_pickle(r'C:\Gamal Elkoumy\PhD\OneDrive - Tartu Ülikool\Courses\Process Mining\Assignment4\predictive-monitoring-benchmark\experiments\optimizer_log\optimal_params_xgboost_turnaround_anon_sla_renamed_cluster_index.pickle')
 
-model= xgb.XGBClassifier(**model_parameters)
+model= xgb.XGBClassifier(objective='binary:logistic',
+                                    n_estimators=500,
+    **model_parameters)
 
 
 pipeline = Pipeline([('encoder', feature_combiner), ('cls', model)])

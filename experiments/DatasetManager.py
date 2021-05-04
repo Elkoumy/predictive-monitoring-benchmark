@@ -17,7 +17,7 @@ def create_ngrams(data, ngram_size):
         prefix=prefix.reset_index()
 
         prefix['Case ID']=prefix['Case ID']+'_'+str(idx)
-
+        prefix['prefix_nr']=idx+1
         result=pd.concat([result,prefix])
 
     return result
@@ -114,7 +114,7 @@ class DatasetManager:
         return (train, val)
 
 
-    def generate_prefix_data(self, data, min_length, max_length, gap=1):
+    def generate_prefix_data_old(self, data, min_length, max_length, gap=1):
         # generate prefix data (each possible prefix becomes a trace)
         data['case_length'] = data.groupby(self.case_id_col)[self.activity_col].transform(len)
 
@@ -132,7 +132,18 @@ class DatasetManager:
         
         return dt_prefixes
 
+    def generate_prefix_data(self,data, ngram_size):
+        # generate prefix data (each possible prefix becomes a trace)
 
+        # ngram_size=3
+        dt_prefixes=data.groupby(['Case ID']).apply(create_ngrams, ngram_size)
+
+        dt_prefixes=dt_prefixes.rename(columns={'Case ID': 'newcaseid'})
+        dt_prefixes=dt_prefixes.reset_index().rename(columns={'Case ID': 'original_caseid'})
+        dt_prefixes=dt_prefixes.drop('level_1',axis=1)
+        dt_prefixes=dt_prefixes.rename(columns={'newcaseid': 'Case ID'})
+
+        return dt_prefixes
 
     def generate_prefix_data_ngram(self,data, ngram_size):
         # generate prefix data (each possible prefix becomes a trace)
