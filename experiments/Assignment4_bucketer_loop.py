@@ -52,13 +52,7 @@ if not os.path.exists(os.path.join(params_dir)):
 dataset_name=dataset_ref
 
 
-# load optimal params
-optimal_params_filename = os.path.join(params_dir,
-                                       "optimal_params_%s_%s_%s.pickle" % (cls_method, dataset_name, method_name))
 
-
-with open(optimal_params_filename, "rb") as fin:
-    args = pickle.load(fin)
 
 # read the data
 dataset_manager = DatasetManager(dataset_name)
@@ -71,10 +65,8 @@ cls_encoder_args = {'case_id_col': dataset_manager.case_id_col,
                     'fillna': True}
 
 
-
 # split into training and test
 train, test = dataset_manager.split_data_strict(data, train_ratio, split="temporal")
-
 
 dt_test_prefixes = dataset_manager.generate_prefix_data(test, ngram_size)
 
@@ -90,6 +82,15 @@ bucketer_args = {'encoding_method': bucket_encoding,
                  'cat_cols': [dataset_manager.activity_col],
                  'num_cols': [],
                  'random_state': random_state}
+
+
+# load optimal params
+optimal_params_filename = os.path.join(params_dir,
+                                       "optimal_params_%s_%s_%s.pickle" % (cls_method, dataset_name, method_name))
+
+with open(optimal_params_filename, "rb") as fin:
+    args = pickle.load(fin)
+
 if bucket_method == "cluster":
     bucketer_args["n_clusters"] = int(args["n_clusters"])
 bucketer = BucketFactory.get_bucketer(bucket_method, **bucketer_args)
