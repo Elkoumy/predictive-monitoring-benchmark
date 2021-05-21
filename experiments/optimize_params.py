@@ -192,6 +192,7 @@ for dataset_name in datasets:
         max_prefix_length = min(20, dataset_manager.get_pos_case_length_quantile(data, 0.90))
     else:
         max_prefix_length = min(40, dataset_manager.get_pos_case_length_quantile(data, 0.90))
+        # max_prefix_length = min(20, dataset_manager.get_pos_case_length_quantile(data, 0.90))
 
     # split into training and test
     train, _ = dataset_manager.split_data_strict(data, train_ratio, split="temporal")

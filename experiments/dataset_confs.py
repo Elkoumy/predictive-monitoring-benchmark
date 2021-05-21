@@ -107,8 +107,8 @@ for dataset, fname in bpic2017_dict.items():
     dynamic_cat_cols[dataset] = ["Activity", 'org:resource', 'Action', 'EventOrigin', 'lifecycle:transition',
                                 "Accepted", "Selected"] 
     static_cat_cols[dataset] = ['ApplicationType', 'LoanGoal']
-    dynamic_num_cols[dataset] = ['FirstWithdrawalAmount', 'MonthlyCost', 'NumberOfTerms', 'OfferedAmount', 'CreditScore',  "timesincelastevent", "timesincecasestart", "timesincemidnight", "event_nr", "month", "weekday", "hour", "open_cases"]
-    static_num_cols[dataset] = ['RequestedAmount']
+    dynamic_num_cols[dataset] = [ 'CreditScore',  "timesincelastevent", "timesincecasestart", "timesincemidnight", "event_nr", "month", "weekday", "hour", "open_cases"]
+    static_num_cols[dataset] = ['RequestedAmount','FirstWithdrawalAmount', 'MonthlyCost', 'NumberOfTerms']
     
     
 #### Hospital billing settings ####
@@ -219,21 +219,29 @@ for formula in range(1,5):
 
 logs_dir = "experiment_log"
 #### Production log settings ####
-dataset = "turnaround_anon_sla_renamed"
+# dataset = "turnaround_anon_sla_renamed"
+dataset = "DahnaLoanApplication_prepared"
 
-filename[dataset] = os.path.join(logs_dir, "turnaround_anon_sla_renamed.csv")
+# filename[dataset] = os.path.join(logs_dir, "turnaround_anon_sla_renamed.csv")
+filename[dataset] = os.path.join(logs_dir, "DahnaLoanApplication_prepared.csv")
 
 case_id_col[dataset] = "Case ID"
 activity_col[dataset] = "Activity"
 #resource_col[dataset] = "Resource"
 timestamp_col[dataset] = "time:timestamp"
 label_col[dataset] = "label"
-neg_label[dataset] = "1"
-pos_label[dataset] = "0"
+pos_label[dataset] = "deviant"
+neg_label[dataset] = "regular"
+# neg_label[dataset] = "1"
+# pos_label[dataset] = "0"
 
 # features for classifier
 static_cat_cols[dataset] = []
 
-static_num_cols[dataset] = ['SLA MIN', 'duration']
+static_num_cols[dataset] = ['RequestedAmount','MonthlyCost', 'FirstWithdrawalAmount', 'CreditScore', 'NumberOfTerms']
 dynamic_cat_cols[dataset] = ["Activity",]
-dynamic_num_cols[dataset] = ["WIP"]
+dynamic_num_cols[dataset]= ['OfferedAmount', 'WIP', 'timesincemidnight', 'month', 'weekday', 'hour','timesincelastevent',
+                            'timesincecasestart','event_nr']
+
+
+

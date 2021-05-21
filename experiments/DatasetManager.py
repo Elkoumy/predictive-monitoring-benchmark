@@ -158,6 +158,9 @@ class DatasetManager:
 
         return dt_prefixes
     def get_pos_case_length_quantile(self, data, quantile=0.90):
+        print("result is")
+        print(self.label_col)
+        print(self.pos_label)
         return int(np.ceil(data[data[self.label_col]==self.pos_label].groupby(self.case_id_col).size().quantile(quantile)))
 
     def get_indexes(self, data):
